@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Container, Form, Button, Label, Input } from "./SearchForm.styled";
+import makeNotification from "services/notification";
 
 export default function SearchForm({ submit }) {
   const [query, setQuery] = useState("");
@@ -11,6 +12,11 @@ export default function SearchForm({ submit }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (query === "") {
+      makeNotification("Enter something");
+      return;
+    }
 
     submit(query);
   }

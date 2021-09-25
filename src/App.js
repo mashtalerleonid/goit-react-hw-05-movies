@@ -2,6 +2,8 @@ import { lazy, Suspense } from "react";
 import { Switch, Route } from "react-router-dom";
 import Header from "components/Header";
 import Loader from "components/Loader";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HomeView = lazy(() => import("views/HomeView"));
 const MovieDetailsView = lazy(() => import("views/MovieDetailsView"));
@@ -14,7 +16,7 @@ export default function App() {
       <Suspense fallback={<Loader />}>
         <Switch>
           <Route path="/" exact>
-            <HomeView />
+            <HomeView wrongUrl={false} />
           </Route>
           <Route path="/movies" exact>
             <MoviesSearchView />
@@ -22,8 +24,12 @@ export default function App() {
           <Route path="/movies/:movieId">
             <MovieDetailsView />
           </Route>
+          <Route>
+            <HomeView wrongUrl={true} />
+          </Route>
         </Switch>
       </Suspense>
+      <ToastContainer />
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
+
 import noPosterImg from "images/no-poster.jpg";
 import {
   List,
