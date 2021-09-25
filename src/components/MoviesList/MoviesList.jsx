@@ -1,4 +1,4 @@
-import { Link, useRouteMatch, useHistory } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 import noPosterImg from "images/no-poster.jpg";
 import {
@@ -45,10 +45,7 @@ export default function MoviesList({ list, search = "" }) {
             }}
           >
             <Thumb>
-              <Img
-                src={checkPoster(film.poster_path)}
-                alt="{checkTitle(film)}"
-              />
+              <Img src={checkPoster(film.poster_path)} alt={checkTitle(film)} />
             </Thumb>
             <Content>
               <Name>{checkTitle(film)}</Name>
