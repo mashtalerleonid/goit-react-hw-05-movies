@@ -6,6 +6,7 @@ import MoviesList from "components/MoviesList";
 import Loader from "components/Loader";
 import NotFoundView from "./NotFoundView";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Top from "components/Top/Top";
 
 export default function MoviesSearchView(params) {
   const [searchFilms, setSearchFilms] = useState([]);
@@ -13,6 +14,7 @@ export default function MoviesSearchView(params) {
   const history = useHistory();
   const location = useLocation();
   let page = useRef(1);
+  let showTop = useRef(false);
 
   const queryParam = new URLSearchParams(location.search).get("query");
 
@@ -36,6 +38,7 @@ export default function MoviesSearchView(params) {
 
   function fetchMoreData() {
     page.current += 1;
+    showTop.current = true;
 
     moviesAPI
       .fetchQueryFilms(queryParam, page.current)
@@ -63,14 +66,17 @@ export default function MoviesSearchView(params) {
         (searchFilms.length === 0 ? (
           <NotFoundView text={"No movie on your request"} />
         ) : (
-          <InfiniteScroll
-            dataLength={searchFilms.length}
-            next={fetchMoreData}
-            hasMore={true}
-            loader={<Loader />}
-          >
-            <MoviesList list={searchFilms} search={location.search} />
-          </InfiniteScroll>
+          <>
+            <Top isShown={showTop.current} />
+            <InfiniteScroll
+              dataLength={searchFilms.length}
+              next={fetchMoreData}
+              hasMore={true}
+              loader={<Loader />}
+            >
+              <MoviesList list={searchFilms} search={location.search} />
+            </InfiniteScroll>
+          </>
         ))}
 
       {status === "rejected" && <NotFoundView />}

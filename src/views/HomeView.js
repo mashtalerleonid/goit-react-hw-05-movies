@@ -5,12 +5,15 @@ import MoviesList from "components/MoviesList";
 import NotFoundView from "./NotFoundView";
 import Loader from "components/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Top from "components/Top/Top";
 
 export default function HomeView({ wrongUrl }) {
   const [popularFilms, setPopularFilms] = useState([]);
   const [status, setStatus] = useState("idle");
+  // const [showTop, setShowTop] = useState("false");
   const history = useHistory();
   let page = useRef(1);
+  let showTop = useRef(false);
 
   useEffect(() => {
     wrongUrl && history.push("/");
@@ -33,6 +36,7 @@ export default function HomeView({ wrongUrl }) {
 
   function fetchMoreData() {
     page.current += 1;
+    showTop.current = true;
 
     moviesAPI
       .fetchPopularFilms(page.current)
@@ -51,14 +55,17 @@ export default function HomeView({ wrongUrl }) {
       {status === "pending" && <Loader />}
 
       {status === "resolved" && (
-        <InfiniteScroll
-          dataLength={popularFilms.length}
-          next={fetchMoreData}
-          hasMore={true}
-          loader={<Loader />}
-        >
-          <MoviesList list={popularFilms} />
-        </InfiniteScroll>
+        <>
+          <Top isShown={showTop.current} />
+          <InfiniteScroll
+            dataLength={popularFilms.length}
+            next={fetchMoreData}
+            hasMore={true}
+            loader={<Loader />}
+          >
+            <MoviesList list={popularFilms} />
+          </InfiniteScroll>{" "}
+        </>
       )}
 
       {status === "rejected" && <NotFoundView />}
